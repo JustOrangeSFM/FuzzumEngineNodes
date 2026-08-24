@@ -304,11 +304,10 @@ class extends Blackprint.Node {
 
 
 
-
-// Входная нода функции
+// Входная нода функции (без пустых портов!)
 Blackprint.registerNode("FuzzumEngine/Fn/Input", class extends Blackprint.Node {
     static output = {
-        "": Blackprint.Types.Any
+        // Убираем пустой порт. Порты будут создаваться динамически.
     };
 
     constructor(instance) {
@@ -336,10 +335,10 @@ Blackprint.registerNode("FuzzumEngine/Fn/Main", class extends Blackprint.Node {
     update() {}
 });
 
-// Выходная нода функции
+// Выходная нода функции (без пустых портов!)
 Blackprint.registerNode("FuzzumEngine/Fn/Output", class extends Blackprint.Node {
     static input = {
-        "": Blackprint.Types.Any
+        // Убираем пустой порт. Порты будут создаваться динамически.
     };
 
     constructor(instance) {
