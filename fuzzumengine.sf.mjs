@@ -305,8 +305,7 @@ class extends Blackprint.Node {
 
 
 
-
-// Входная нода функции (определяет входные пины)
+// Входная нода функции
 Blackprint.registerNode("FuzzumEngine/Fn/Input", class extends Blackprint.Node {
     static output = {
         "": Blackprint.Types.Any
@@ -317,30 +316,27 @@ Blackprint.registerNode("FuzzumEngine/Fn/Input", class extends Blackprint.Node {
         let iface = this.setInterface();
         iface.title = "Function Input";
         iface.description = "Input ports for a custom function";
-        this._isFnInput = true;
-    }
-
-    // Позволяет добавлять порты динамически
-    createPort(name, type = Blackprint.Types.Any) {
-        if (this.iface.output[name]) {
-            console.warn('Port already exists:', name);
-            return;
-        }
-        this.iface.output.createPort(name, type);
-        this.iface._recalculateBpVisual();
-    }
-
-    deletePort(name) {
-        if (!this.iface.output[name]) return;
-        delete this.iface.output[name];
-        this.iface.output._portList = this.iface.output._portList.filter(p => p.name !== name);
-        this.iface._recalculateBpVisual();
     }
 
     update() {}
 });
 
-// Выходная нода функции (определяет выходные пины)
+// Главная нода функции
+Blackprint.registerNode("FuzzumEngine/Fn/Main", class extends Blackprint.Node {
+    static input = {};
+    static output = {};
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Main";
+        iface.description = "Main execution node inside a custom function";
+    }
+
+    update() {}
+});
+
+// Выходная нода функции
 Blackprint.registerNode("FuzzumEngine/Fn/Output", class extends Blackprint.Node {
     static input = {
         "": Blackprint.Types.Any
@@ -351,39 +347,6 @@ Blackprint.registerNode("FuzzumEngine/Fn/Output", class extends Blackprint.Node 
         let iface = this.setInterface();
         iface.title = "Function Output";
         iface.description = "Output ports for a custom function";
-        this._isFnOutput = true;
-    }
-
-    createPort(name, type = Blackprint.Types.Any) {
-        if (this.iface.input[name]) {
-            console.warn('Port already exists:', name);
-            return;
-        }
-        this.iface.input.createPort(name, type);
-        this.iface._recalculateBpVisual();
-    }
-
-    deletePort(name) {
-        if (!this.iface.input[name]) return;
-        delete this.iface.input[name];
-        this.iface.input._portList = this.iface.input._portList.filter(p => p.name !== name);
-        this.iface._recalculateBpVisual();
-    }
-
-    update() {}
-});
-
-// Главная нода функции (выполняется внутри)
-Blackprint.registerNode("FuzzumEngine/Fn/Main", class extends Blackprint.Node {
-    static input = {};
-    static output = {};
-
-    constructor(instance) {
-        super(instance);
-        let iface = this.setInterface();
-        iface.title = "Function Main";
-        iface.description = "Main execution node inside a custom function";
-        this._isFnMain = true;
     }
 
     update() {}
