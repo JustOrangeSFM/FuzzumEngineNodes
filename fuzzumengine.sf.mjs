@@ -6,62 +6,6 @@ if(!window.templates) window.templates={};var _$_ = sf.dom || sf.$;var __tmplt =
 
 console.log('[FuzzumEngine] All nodes loaded!');
 // ============================================
-// FUZZUM ENGINE - All Types Node
-// ============================================
-
-Blackprint.registerNode("FuzzumEngine/Types/AllTypes",
-class extends Blackprint.Node {
-	static input = {
-		Exec: Blackprint.Types.Slot,
-		Any: Blackprint.Types.Any,
-		Number: Number,
-		String: String,
-		Boolean: Boolean,
-		Array: Array,
-		Object: Object,
-		Function: Function,
-	};
-
-	static output = {
-		Done: Blackprint.Types.Slot,
-		Any: Blackprint.Types.Any,
-		Number: Number,
-		String: String,
-		Boolean: Boolean,
-		Array: Array,
-		Object: Object,
-		Function: Function,
-	};
-
-	constructor(instance){
-		super(instance);
-		this.setInterface().title = "All Types";
-	}
-
-	update(){
-		let { Input, Output } = this.ref;
-		
-		console.log(' All Types:');
-		console.log('  Any:', Input.Any);
-		console.log('  Number:', Input.Number);
-		console.log('  String:', Input.String);
-		console.log('  Boolean:', Input.Boolean);
-		console.log('  Array:', Input.Array);
-		console.log('  Object:', Input.Object);
-		console.log('  Function:', Input.Function);
-		
-		Output.Any = Input.Any;
-		Output.Number = Input.Number;
-		Output.String = Input.String;
-		Output.Boolean = Input.Boolean;
-		Output.Array = Input.Array;
-		Output.Object = Input.Object;
-		Output.Function = Input.Function;
-		
-		if (this.routes?.routeOut) this.routes.routeOut();
-	}
-});
-// ============================================
 // FUZZUM ENGINE - Base Functions
 // ============================================
 
@@ -353,6 +297,152 @@ class extends Blackprint.Node {
 	
 	update() {};
     input() {};
+});
+
+
+
+
+
+
+
+
+// Входная нода функции (определяет входные пины)
+Blackprint.registerNode("FuzzumEngine/Fn/Input", class extends Blackprint.Node {
+    static output = {
+        "": Blackprint.Types.Any
+    };
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Input";
+        iface.description = "Input ports for a custom function";
+        this._isFnInput = true;
+    }
+
+    // Позволяет добавлять порты динамически
+    createPort(name, type = Blackprint.Types.Any) {
+        if (this.iface.output[name]) {
+            console.warn('Port already exists:', name);
+            return;
+        }
+        this.iface.output.createPort(name, type);
+        this.iface._recalculateBpVisual();
+    }
+
+    deletePort(name) {
+        if (!this.iface.output[name]) return;
+        delete this.iface.output[name];
+        this.iface.output._portList = this.iface.output._portList.filter(p => p.name !== name);
+        this.iface._recalculateBpVisual();
+    }
+
+    update() {}
+});
+
+// Выходная нода функции (определяет выходные пины)
+Blackprint.registerNode("FuzzumEngine/Fn/Output", class extends Blackprint.Node {
+    static input = {
+        "": Blackprint.Types.Any
+    };
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Output";
+        iface.description = "Output ports for a custom function";
+        this._isFnOutput = true;
+    }
+
+    createPort(name, type = Blackprint.Types.Any) {
+        if (this.iface.input[name]) {
+            console.warn('Port already exists:', name);
+            return;
+        }
+        this.iface.input.createPort(name, type);
+        this.iface._recalculateBpVisual();
+    }
+
+    deletePort(name) {
+        if (!this.iface.input[name]) return;
+        delete this.iface.input[name];
+        this.iface.input._portList = this.iface.input._portList.filter(p => p.name !== name);
+        this.iface._recalculateBpVisual();
+    }
+
+    update() {}
+});
+
+// Главная нода функции (выполняется внутри)
+Blackprint.registerNode("FuzzumEngine/Fn/Main", class extends Blackprint.Node {
+    static input = {};
+    static output = {};
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Main";
+        iface.description = "Main execution node inside a custom function";
+        this._isFnMain = true;
+    }
+
+    update() {}
+});
+// ============================================
+// FUZZUM ENGINE - All Types Node
+// ============================================
+
+Blackprint.registerNode("FuzzumEngine/Types/AllTypes",
+class extends Blackprint.Node {
+	static input = {
+		Exec: Blackprint.Types.Slot,
+		Any: Blackprint.Types.Any,
+		Number: Number,
+		String: String,
+		Boolean: Boolean,
+		Array: Array,
+		Object: Object,
+		Function: Function,
+	};
+
+	static output = {
+		Done: Blackprint.Types.Slot,
+		Any: Blackprint.Types.Any,
+		Number: Number,
+		String: String,
+		Boolean: Boolean,
+		Array: Array,
+		Object: Object,
+		Function: Function,
+	};
+
+	constructor(instance){
+		super(instance);
+		this.setInterface().title = "All Types";
+	}
+
+	update(){
+		let { Input, Output } = this.ref;
+		
+		console.log(' All Types:');
+		console.log('  Any:', Input.Any);
+		console.log('  Number:', Input.Number);
+		console.log('  String:', Input.String);
+		console.log('  Boolean:', Input.Boolean);
+		console.log('  Array:', Input.Array);
+		console.log('  Object:', Input.Object);
+		console.log('  Function:', Input.Function);
+		
+		Output.Any = Input.Any;
+		Output.Number = Input.Number;
+		Output.String = Input.String;
+		Output.Boolean = Input.Boolean;
+		Output.Array = Input.Array;
+		Output.Object = Input.Object;
+		Output.Function = Input.Function;
+		
+		if (this.routes?.routeOut) this.routes.routeOut();
+	}
 });
 
 //# sourceMappingURL=fuzzumengine.sf.mjs.map
