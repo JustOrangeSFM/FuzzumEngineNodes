@@ -298,29 +298,58 @@ class extends Blackprint.Node {
 	update() {};
     input() {};
 });
-////////Functions
 
 
 
-Blackprint.registerNode("FuzzumEngine/dfdf",
-class extends Blackprint.Node {
-	static input = { 
-	    Execute: Function,
-	    ActorClass: String,
-		FunctionName: String
-	};
-	
-	static output = { 
-	    Then: Function
-	};
 
-	constructor(instance){
-		super(instance);
-		this.setInterface().title = "dfdf";
-	};
-	
-	update() {};
-    input() {};
+
+
+
+// Входная нода функции
+Blackprint.registerNode("FuzzumEngine/Fn/Input", class extends Blackprint.Node {
+    static output = {
+        "": Blackprint.Types.Any
+    };
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Input";
+        iface.description = "Input ports for a custom function";
+    }
+
+    update() {}
+});
+
+// Главная нода функции
+Blackprint.registerNode("FuzzumEngine/Fn/Main", class extends Blackprint.Node {
+    static input = {};
+    static output = {};
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Main";
+        iface.description = "Main execution node inside a custom function";
+    }
+
+    update() {}
+});
+
+// Выходная нода функции
+Blackprint.registerNode("FuzzumEngine/Fn/Output", class extends Blackprint.Node {
+    static input = {
+        "": Blackprint.Types.Any
+    };
+
+    constructor(instance) {
+        super(instance);
+        let iface = this.setInterface();
+        iface.title = "Function Output";
+        iface.description = "Output ports for a custom function";
+    }
+
+    update() {}
 });
 // ============================================
 // FUZZUM ENGINE - All Types Node
